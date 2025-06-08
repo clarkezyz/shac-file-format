@@ -1,0 +1,30 @@
+# SHAC audio files (hosted externally)
+*.shac
+*.zyz
+
+# Audio source files
+*.wav
+*.ogg
+*.flac
+*.mp3
+*.aac
+*.m4a
+
+# Internal handoff documents (not for public)
+*BATON*
+*ACCOMPLISHED*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

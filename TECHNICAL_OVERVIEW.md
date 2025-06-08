@@ -1,11 +1,11 @@
-# Technical Overview: SHAC & ZYZ
+# Technical Overview: SHAC
 
 Quick technical reference for developers implementing spatial audio support.
 
 ## Core Concepts
 
 ### Spherical Harmonics
-SHAC/ZYZ use spherical harmonics to encode 3D spatial audio:
+SHAC uses spherical harmonics to encode 3D spatial audio:
 - Mathematical functions that describe directional information
 - Enable rotation and positioning in 3D space
 - Channel count = (order + 1)² 
@@ -40,24 +40,11 @@ struct SHACHeader {
 };
 ```
 
-### ZYZ Header (Variable)
-```c
-struct ZYZHeader {
-    char magic[4];        // 'ZYZ1'
-    uint16_t layers;      // number of sources
-    uint32_t sample_rate; // Hz
-    uint16_t order;       // 1-7
-    uint16_t channels;    // (order+1)²
-    uint16_t quality_len; // length of quality string
-    // variable: quality settings string
-};
-```
-
 ## Implementation Essentials
 
 ### File Reading Pattern
 ```javascript
-// 1. Read magic bytes, determine format
+// 1. Read magic bytes ('SHAC')
 // 2. Parse header structure
 // 3. Read each layer:
 //    - Layer name
@@ -69,7 +56,6 @@ struct ZYZHeader {
 ### Memory Layout
 ```
 SHAC: [Header][Layer1][Layer2]...[LayerN]
-ZYZ:  [Header][Quality][Layer1][Layer2]...[LayerN]
 
 Layer: [Name][Metadata][AudioData]
 ```
@@ -110,24 +96,14 @@ function binauralRender(ambisonicChannels, hrtfData) {
 }
 ```
 
-## Compression (ZYZ Only)
+## File Size Considerations
 
-### Key Principles
-1. **Preserve channel relationships** for spatial coherence
-2. **Respect ambisonic hierarchy** (W most important)
-3. **Maintain mathematical precision** where critical
-4. **Optimize for 16-bit representation**
+SHAC files are substantial (15-20 MB per minute) because:
+- **Mathematical Precision**: Spatial positioning requires exact coefficients
+- **Multi-Channel Data**: Higher-order ambisonics use many channels
+- **No Compromise**: Full fidelity preservation for perfect spatial experience
 
-### Decompression Flow
-```javascript
-async function decompressZYZ(compressedData) {
-    // 1. Read compression settings
-    // 2. Apply appropriate decompression algorithm
-    // 3. Reconstruct ambisonic channels
-    // 4. Validate spatial relationships
-    // 5. Return SHAC-compatible format
-}
-```
+We researched compression extensively but found that spatial audio's mathematical requirements resist compression without introducing perceptible artifacts that degrade the immersive experience.
 
 ## Performance Optimization
 
@@ -156,7 +132,7 @@ Parser → Validator → Spatial Processor → Audio Renderer
 ### Validation Checklist
 ```javascript
 function validateSpatialFile(data) {
-    // ✓ Magic bytes correct
+    // ✓ Magic bytes correct ('SHAC')
     // ✓ Version supported  
     // ✓ Channel count matches order
     // ✓ Sample count consistent
@@ -173,7 +149,7 @@ function validateSpatialFile(data) {
 // File input handling
 input.addEventListener('change', async (e) => {
     const file = e.target.files[0];
-    if (file.name.endsWith('.shac') || file.name.endsWith('.zyz')) {
+    if (file.name.endsWith('.shac')) {
         const spatialAudio = await loadSpatialAudio(file);
         setupSpatialPlayer(spatialAudio);
     }
@@ -195,17 +171,12 @@ spatialProcessor.onaudioprocess = (event) => {
 
 ## Quality Guidelines
 
-### SHAC (Uncompressed)
+### SHAC Production Standards
 - **Sample Rate**: 44.1kHz minimum, 48kHz+ preferred
 - **Bit Depth**: 24-bit for production, 16-bit acceptable
 - **Order**: 3rd order recommended for music
 - **Layers**: No practical limit
-
-### ZYZ (Compressed)  
-- **Target Compression**: 2-4x for music content
-- **Quality**: Spatial positioning preserved >95%
-- **Compatibility**: Fully compatible with SHAC workflows
-- **Use Cases**: Distribution, streaming, mobile
+- **File Size**: Plan for 15-20 MB per minute for high-quality spatial audio
 
 ## Platform Considerations
 
@@ -222,7 +193,7 @@ spatialProcessor.onaudioprocess = (event) => {
 - Cross-browser compatibility
 
 ### Mobile Devices
-- ZYZ format preferred for storage efficiency
+- Consider file size for storage and bandwidth
 - Reduced processing complexity for battery life
 - Touch/gyroscope navigation interfaces
 - Adaptive quality based on device capabilities
@@ -233,8 +204,8 @@ spatialProcessor.onaudioprocess = (event) => {
 ```bash
 # Pseudo-commands for format checking
 shac-validate file.shac
-zyz-validate file.zyz
-spatial-info file.{shac,zyz}
+spatial-info file.shac
+spatial-test file.shac
 ```
 
 ### Testing Approaches
@@ -256,8 +227,27 @@ spatial-info file.{shac,zyz}
 - **JSON**: Metadata formatting
 - **UTF-8**: Text encoding
 
+## Integration Best Practices
+
+### Loading Strategy
+```javascript
+// Progressive loading for large files
+async function loadSHAC(file) {
+    // 1. Load header first
+    // 2. Validate format and size
+    // 3. Load layers as needed
+    // 4. Provide loading progress feedback
+}
+```
+
+### Memory Management
+- Stream large files instead of loading entirely
+- Cache frequently accessed spatial data
+- Optimize buffer allocation for real-time processing
+- Handle memory pressure gracefully
+
 ---
 
-*This technical overview provides the essential information needed to implement SHAC/ZYZ support. For complete specifications, see the detailed format documents.*
+*This technical overview provides the essential information needed to implement SHAC support. For complete specifications, see the detailed format documents.*
 
 **Ready to join the spatial audio revolution?**

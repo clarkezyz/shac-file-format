@@ -1,13 +1,13 @@
-# SHAC & ZYZ Examples & Applications
+# SHAC Examples & Applications
 
-Practical examples of revolutionary spatial audio formats in action.
+Practical examples of revolutionary spatial audio format in action.
 
 ## 🎵 Musical Applications
 
 ### Interactive Albums
 ```
 Album: "Spatial Symphony"
-Format: ZYZ (compressed for distribution)
+Format: SHAC (full fidelity spatial audio)
 Experience: Listeners navigate through orchestra sections
 - Move closer to strings section
 - Step behind the conductor's position  
@@ -56,7 +56,7 @@ Features:
 ```
 Workflow: Spatial Mix Review
 1. Create SHAC master with all source positions
-2. Share ZYZ compressed version with clients
+2. Share full-quality SHAC files with clients
 3. Remote review with synchronized navigation
 4. Real-time positioning feedback
 5. Final approval with exact spatial placement
@@ -72,7 +72,7 @@ Sources:
 - Footsteps: Path through scene
 - Ambient: 360° environmental layer
 
-Export: ZYZ for efficient iteration sharing
+Export: SHAC for full spatial fidelity
 ```
 
 ## 🌐 Web Applications
@@ -85,7 +85,7 @@ Export: ZYZ for efficient iteration sharing
     <title>Spatial Audio Player</title>
 </head>
 <body>
-    <input type="file" accept=".shac,.zyz" id="audioFile">
+    <input type="file" accept=".shac" id="audioFile">
     <canvas id="visualizer"></canvas>
     <div id="controls">
         <button id="play">Play</button>
@@ -93,24 +93,24 @@ Export: ZYZ for efficient iteration sharing
     </div>
     
     <script>
-        // Universal format support
-        // Automatic SHAC/ZYZ detection
+        // SHAC format support
         // Real-time spatial navigation
         // Visual position feedback
+        // Progressive loading for large files
     </script>
 </body>
 </html>
 ```
 
-### Streaming Applications
+### High-Quality Streaming
 ```
-Service: "SpatialStream"
-Technology: Progressive ZYZ loading
+Service: "SpatialStream Premium"
+Technology: SHAC with adaptive delivery
 Benefits:
-- Compressed format reduces bandwidth
-- Instant playback start
-- Full spatial navigation during stream
-- Adaptive quality based on connection
+- Full spatial fidelity preservation
+- Professional audio quality
+- Complete spatial navigation
+- Premium uncompressed experience
 ```
 
 ## 🎓 Educational Applications
@@ -132,11 +132,11 @@ Experience: Walk between harmonies to hear relationships
 Project: "Carnegie Hall 1961"
 Content: Historic performance recreation
 Format: SHAC (archival quality)
-Distribution: ZYZ (public access)
 Features:
 - Period-accurate instrument positions
 - Authentic hall acoustics
 - Multiple time periods in same space
+- Uncompressed preservation for future generations
 ```
 
 ## 🏥 Therapeutic Applications
@@ -150,7 +150,7 @@ Elements:
 - Wind: Surrounding, subtle
 - Breathing guide: Center, soft
 
-Format: ZYZ (mobile device friendly)
+Format: SHAC (highest quality for therapeutic effectiveness)
 Control: Minimal movement, position presets
 ```
 
@@ -165,13 +165,14 @@ Sources:
 - Calibrated positioning for accuracy
 
 Benefits: More natural than traditional stereo tests
+Requirement: SHAC precision for medical accuracy
 ```
 
 ## 📱 Mobile Applications
 
 ### Spatial Music Player
 ```
-App: "ZYZ Player"
+App: "SHAC Player"
 Features:
 - Gesture navigation through songs
 - Gyroscope head tracking
@@ -179,7 +180,7 @@ Features:
 - Preset listening positions
 - Social sharing of spatial "viewpoints"
 
-Optimization: ZYZ format for storage efficiency
+Note: Requires robust storage and bandwidth for full SHAC quality
 ```
 
 ### Location-Based Audio
@@ -192,7 +193,7 @@ Content:
 - Interactive city exploration
 - Augmented reality integration
 
-Distribution: ZYZ for mobile data efficiency
+Quality: SHAC format preserves immersive experience
 ```
 
 ## 🔬 Research Applications
@@ -207,7 +208,7 @@ Variables:
 - Movement detection sensitivity
 - Spatial memory formation
 
-Advantage: Mathematical precision of SHAC format
+Advantage: Mathematical precision of SHAC format essential for research
 ```
 
 ### Algorithm Development
@@ -215,10 +216,10 @@ Advantage: Mathematical precision of SHAC format
 Project: "Spatial Audio Processing"
 Input: SHAC files (reference quality)
 Processing: Various spatial algorithms
-Output: ZYZ comparison tests
+Testing: Algorithm effectiveness on perfect spatial data
 Metrics:
-- Compression vs. quality tradeoffs
 - Spatial accuracy preservation
+- Processing efficiency
 - Perceptual difference measurements
 ```
 
@@ -230,15 +231,15 @@ Workflow: "3D Audio Post-Production"
 1. Record individual sources
 2. Position in 3D space using SHAC tools
 3. Mix and master in spatial domain
-4. Export SHAC master for archival
-5. Create ZYZ distribution copies
-6. Test navigation on target platforms
+4. Export SHAC master for distribution
+5. Test navigation on target platforms
+6. Archive SHAC files for future formats
 ```
 
 ### Interactive Storytelling
 ```
 Story: "The Haunted Library"
-Format: ZYZ (web distribution)
+Format: SHAC (uncompressed narrative experience)
 Interaction:
 - Follow whispers through stacks
 - Discover story fragments by location
@@ -260,10 +261,6 @@ async function loadSpatialAudio(file) {
         magic[2] === 0x41 && magic[3] === 0x43) {
         // SHAC format
         return await SHACDecoder.decode(arrayBuffer);
-    } else if (magic[0] === 0x5A && magic[1] === 0x59 && 
-               magic[2] === 0x5A && magic[3] === 0x31) {
-        // ZYZ format  
-        return await ZYZDecoder.decode(arrayBuffer);
     }
     
     throw new Error('Unsupported spatial audio format');
@@ -301,6 +298,34 @@ class SpatialNavigator {
 }
 ```
 
+### Progressive Loading Strategy
+```javascript
+class SHACLoader {
+    constructor() {
+        this.chunkSize = 1024 * 1024; // 1MB chunks
+    }
+    
+    async loadProgressively(file) {
+        // 1. Load header first (26 bytes)
+        const header = await this.readChunk(file, 0, 26);
+        const fileInfo = this.parseHeader(header);
+        
+        // 2. Load layers on demand
+        const layers = [];
+        let offset = 26;
+        
+        for (let i = 0; i < fileInfo.layers; i++) {
+            // Load layer metadata first
+            const layerMeta = await this.loadLayerMetadata(file, offset);
+            layers.push(layerMeta);
+            offset += layerMeta.totalSize;
+        }
+        
+        return { fileInfo, layers };
+    }
+}
+```
+
 ## 🌟 Success Stories
 
 ### Community Impact
@@ -311,14 +336,36 @@ class SpatialNavigator {
 - **Researchers**: Advancing spatial audio science
 
 ### Technical Achievements
-- **First compressed spatial audio format** (ZYZ)
+- **First working interactive spatial audio format**
 - **Universal web browser compatibility**
 - **No special hardware requirements**
 - **Mathematical precision preservation**
 - **Real-time interactive navigation**
 
+## 💡 Design Considerations
+
+### File Size Management
+```
+Strategies for Large SHAC Files:
+- Progressive loading for web applications
+- Chunk-based streaming for networks
+- Local caching for repeated access
+- Adaptive quality for different use cases
+- Smart preloading based on user behavior
+```
+
+### Performance Optimization
+```
+Best Practices:
+- Use Web Workers for file processing
+- Implement audio buffer management
+- Cache spatial transformation matrices
+- Optimize rendering pipeline
+- Monitor memory usage patterns
+```
+
 ---
 
-*These examples represent just the beginning. SHAC and ZYZ formats enable entirely new categories of audio experiences that were previously impossible.*
+*These examples represent just the beginning. The SHAC format enables entirely new categories of audio experiences that were previously impossible.*
 
 **The spatial audio revolution is here. What will you create?**
